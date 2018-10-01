@@ -1,0 +1,28 @@
+PB9-BOOT0       boot0 button
+PC14-OSC32_IN   SELECT_JOYSTICK
+PC15-OSC32_OUT  SELECT_KEYPAD
+NRST            reset
+VDDA            3v3
+PA0-CK_IN       QUADB1
+PA1             E1
+PA2             W1
+PA3             QUADA1
+PA4             S1
+PA5             F1
+PA6             N1
+PA7             DBG_LED
+PB0             QUADB1
+PB1             E2
+VSS             ground
+VDD             3v3
+PA8             W2
+PA9             USART2_TX (and pull up with 100K)
+PA10            USART2_RX (and pull up with 100K)
+PA13            QUADA2
+PA14            S2
+PA15            F2
+PB3             N2
+PB4             DEBUG_GPIO
+PB5             IRQ
+PB6             I2C1_SCL
+PB7             I2C1_SDA
