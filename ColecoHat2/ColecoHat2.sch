@@ -60,6 +60,7 @@ F 8 "https://www.digikey.com/product-detail/en/D09P33E4GX00LF/609-1481-ND/100179
 F 9 "DB-9 right-angle TH" H 5175 1700 60  0001 C CNN "Description"
 F 10 "9POS" H 5175 1700 60  0001 C CNN "Package"
 F 11 "thru-hole" H 5175 1700 60  0001 C CNN "Type"
+F 12 "do not place" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    5175 1700
 	-1   0    0    1   
 $EndComp
@@ -79,6 +80,7 @@ F 8 "https://www.digikey.com/product-detail/en/D09P33E4GX00LF/609-1481-ND/100179
 F 9 "DB-9 right-angle TH" H 5175 1700 60  0001 C CNN "Description"
 F 10 "9POS" H 5175 1700 60  0001 C CNN "Package"
 F 11 "thru-hole" H 5175 1700 60  0001 C CNN "Type"
+F 12 "do not place" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    8225 1675
 	-1   0    0    1   
 $EndComp
@@ -145,6 +147,7 @@ F 0 "J3" H 8900 5525 50  0000 C CNN
 F 1 "PI_HEADER" V 8900 4475 50  0000 C CNN
 F 2 "Pin_Headers:Pin_Header_Straight_2x20_Pitch2.54mm" H 8900 3525 50  0001 C CNN
 F 3 "do not populate" H 8900 3525 50  0001 C CNN
+F 4 "do not place" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    8900 4475
 	1    0    0    -1  
 $EndComp
@@ -319,6 +322,7 @@ F 8 "https://www.digikey.com/product-detail/en/D09P33E4GX00LF/609-1481-ND/100179
 F 9 "IC STM32L0 32-bit Cortex-M0+" H 5175 1700 60  0001 C CNN "Description"
 F 10 "UFQFPN-28" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    5025 4500
 	1    0    0    -1  
 $EndComp
@@ -405,6 +409,7 @@ F 8 "https://www.digikey.com/product-detail/en/susumu/RR1220P-103-D/RR12P10.0KDT
 F 9 "RES 10K OHM 1%" H 5175 1700 60  0001 C CNN "Description"
 F 10 "0805" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    2000 1900
 	1    0    0    -1  
 $EndComp
@@ -468,6 +473,7 @@ F 8 "https://www.digikey.com/product-detail/en/murata-electronics-north-america/
 F 9 "CAP CER .1uF 10%" H 5175 1700 60  0001 C CNN "Description"
 F 10 "0805" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    6750 5150
 	1    0    0    1   
 $EndComp
@@ -487,6 +493,7 @@ F 8 "https://www.digikey.com/product-detail/en/schurter-inc/1301.9314/486-3465-N
 F 9 "SPST switch off-mom gullwing" H 5175 1700 60  0001 C CNN "Description"
 F 10 "SMT 4P" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    2000 1275
 	0    -1   -1   0   
 $EndComp
@@ -528,6 +535,7 @@ F 8 "https://www.digikey.com/product-detail/en/murata-electronics-north-america/
 F 9 "CAP CER .1uF 10%" H 5175 1700 60  0001 C CNN "Description"
 F 10 "0805" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    3250 4450
 	1    0    0    1   
 $EndComp
@@ -547,6 +555,7 @@ F 8 "https://www.digikey.com/product-detail/en/schurter-inc/1301.9314/486-3465-N
 F 9 "SPST switch off-mom gullwing" H 5175 1700 60  0001 C CNN "Description"
 F 10 "SMT 4P" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    3425 5025
 	0    -1   -1   0   
 $EndComp
@@ -588,6 +597,7 @@ F 8 "https://www.digikey.com/product-detail/en/wurth-electronics-inc/150080GS750
 F 9 "LED green" H 5175 1700 60  0001 C CNN "Description"
 F 10 "0805" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMT" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    4075 1700
 	0    -1   -1   0   
 $EndComp
@@ -607,6 +617,7 @@ F 8 "https://www.digikey.com/products/en/resistors/chip-resistor-surface-mount/5
 F 9 "RES 220 OHM 1% 0805" H 5175 1700 60  0001 C CNN "Description"
 F 10 "0805" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    4075 1300
 	1    0    0    -1  
 $EndComp
@@ -717,6 +728,7 @@ F 0 "R3" V 9530 3825 50  0000 C CNN
 F 1 "0" V 9450 3825 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805" V 9380 3825 30  0001 C CNN
 F 3 "do not populate" H 9450 3825 30  0001 C CNN
+F 4 "do not place" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    9450 3825
 	0    1    1    0   
 $EndComp
@@ -728,6 +740,7 @@ F 0 "R4" V 9855 3925 50  0000 C CNN
 F 1 "0" V 9775 3925 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805" V 9705 3925 30  0001 C CNN
 F 3 "do not populate" H 9775 3925 30  0001 C CNN
+F 4 "do not place" H 5175 1700 60  0001 C CNN "Do Not Place"
 	1    9775 3925
 	0    1    1    0   
 $EndComp
@@ -750,9 +763,9 @@ F 3 "do not populate" H 1075 3875 50  0001 C CNN
 	1    1075 3875
 	-1   0    0    1   
 $EndComp
-Text GLabel 1275 3725 2    60   Input ~ 0
+Text GLabel 2300 3725 2    60   Input ~ 0
 USART1_TX
-Text GLabel 1275 3825 2    60   Output ~ 0
+Text GLabel 2300 3825 2    60   Output ~ 0
 USART1_RX
 $Comp
 L GND #PWR026
@@ -791,4 +804,76 @@ DEBUG_GPIO
 Text GLabel 8650 5325 0    60   BiDi ~ 0
 DEBUG_GPIO
 NoConn ~ 6725 4150
+Wire Wire Line
+	1275 3825 2300 3825
+Wire Wire Line
+	1275 3725 2300 3725
+$Comp
+L R R5
+U 1 1 5BB58526
+P 1400 3375
+F 0 "R5" V 1480 3375 50  0000 C CNN
+F 1 "100k" V 1400 3375 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 1330 3375 30  0001 C CNN
+F 3 "http://www.susumu.co.jp/common/pdf/n_catalog_partition05_en.pdf" H 2000 1900 30  0001 C CNN
+F 4 "Susumu" H 5175 1700 60  0001 C CNN "Manufacturer"
+F 5 "RR1220P-104-D" H 5175 1700 60  0001 C CNN "Manufacturer PN"
+F 6 "Digikey" H 5175 1700 60  0001 C CNN "Distributor"
+F 7 "RR12P100KDTR-ND" H 5175 1700 60  0001 C CNN "Distributor PN"
+F 8 "https://www.digikey.com/products/en/resistors/chip-resistor-surface-mount/52?k=&pkeyword=&pv2085=u100+kOhms&sf=0&FV=ffe00034%2Cffec0513%2Cfffc0198%2C80002%2C140716%2C1c0001%2C400006%2C44006b%2Cb8356f%2C2b80017%2C3f00019%2Cii2%7C1127%2C142c00a5%2C1770000f%2C17ec0005%2C1f140000&quantity=&ColumnSort=0&page=1&pageSize=500" H 8225 1675 50  0001 C CNN "Distributor URL"
+F 9 "RES 100K OHM 1%" H 5175 1700 60  0001 C CNN "Description"
+F 10 "0805" H 5175 1700 60  0001 C CNN "Package"
+F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
+	1    1400 3375
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1400 3525 1400 3725
+Connection ~ 1400 3725
+$Comp
+L +3.3V #PWR027
+U 1 1 5BB586B7
+P 1400 3225
+F 0 "#PWR027" H 1400 3075 50  0001 C CNN
+F 1 "+3.3V" H 1400 3365 50  0000 C CNN
+F 2 "" H 1400 3225 60  0000 C CNN
+F 3 "" H 1400 3225 60  0000 C CNN
+	1    1400 3225
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R6
+U 1 1 5BB58729
+P 1750 3375
+F 0 "R6" V 1830 3375 50  0000 C CNN
+F 1 "100k" V 1750 3375 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 1680 3375 30  0001 C CNN
+F 3 "http://www.susumu.co.jp/common/pdf/n_catalog_partition05_en.pdf" H 2000 1900 30  0001 C CNN
+F 4 "Susumu" H 5175 1700 60  0001 C CNN "Manufacturer"
+F 5 "RR1220P-104-D" H 5175 1700 60  0001 C CNN "Manufacturer PN"
+F 6 "Digikey" H 5175 1700 60  0001 C CNN "Distributor"
+F 7 "RR12P100KDTR-ND" H 5175 1700 60  0001 C CNN "Distributor PN"
+F 8 "https://www.digikey.com/products/en/resistors/chip-resistor-surface-mount/52?k=&pkeyword=&pv2085=u100+kOhms&sf=0&FV=ffe00034%2Cffec0513%2Cfffc0198%2C80002%2C140716%2C1c0001%2C400006%2C44006b%2Cb8356f%2C2b80017%2C3f00019%2Cii2%7C1127%2C142c00a5%2C1770000f%2C17ec0005%2C1f140000&quantity=&ColumnSort=0&page=1&pageSize=500" H 8225 1675 50  0001 C CNN "Distributor URL"
+F 9 "RES 100K OHM 1%" H 5175 1700 60  0001 C CNN "Description"
+F 10 "0805" H 5175 1700 60  0001 C CNN "Package"
+F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
+F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
+	1    1750 3375
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1750 3525 1750 3825
+$Comp
+L +3.3V #PWR028
+U 1 1 5BB587CF
+P 1750 3225
+F 0 "#PWR028" H 1750 3075 50  0001 C CNN
+F 1 "+3.3V" H 1750 3365 50  0000 C CNN
+F 2 "" H 1750 3225 60  0000 C CNN
+F 3 "" H 1750 3225 60  0000 C CNN
+	1    1750 3225
+	1    0    0    -1  
+$EndComp
+Connection ~ 1750 3825
 $EndSCHEMATC
