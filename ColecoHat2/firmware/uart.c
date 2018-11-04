@@ -1,114 +1,32 @@
 #include <stm32l0xx_hal.h>
 #include "defs.h"
 #include "uart.h"
+#include "stm32l0xx_ll_bus.h"
+#include "stm32l0xx_ll_rcc.h"
+// #include "stm32l0xx_ll_system.h"
+// #include "stm32l0xx_ll_utils.h"
+// #include "stm32l0xx_ll_cortex.h"
+// #include "stm32l0xx_ll_exti.h"
+//#include "stm32l0xx_ll_pwr.h"
+#include "stm32l0xx_ll_gpio.h"
+#include "stm32l0xx_ll_usart.h"
 
 /*--------------------------------------------------------------------------*/
 /* USART - serial comms ----------------------------------------------------*/
 
-static UART_HandleTypeDef gUARTHandle;
-
-#define TRANSMIT_BUFFER_SIZE 64
-volatile unsigned char gTransmitBuffers[2][TRANSMIT_BUFFER_SIZE];
-volatile int gNextTransmitBuffer = 0;
-volatile int gTransmitBufferLengths[2] = {0, 0};
-volatile int gUARTTransmitBusy = 0;
-
-void USART1_IRQHandler(void)
+void SERIAL_send_one_char(char c)
 {
-  HAL_UART_IRQHandler(&gUARTHandle);
-}
+    /* Wait for TXE flag to be raised */
+    while (!LL_USART_IsActiveFlag_TXE(USART2));
 
-void HAL_UART_MspInit(UART_HandleTypeDef *huart)
-{
-  GPIO_InitTypeDef  GPIO_InitStruct;
-  
-  /*##-1- Enable peripherals and GPIO Clocks #################################*/
-  /* Enable GPIO TX/RX clock */
-  // __HAL_RCC_GPIOB_CLK_ENABLE();
-  
-  /* Enable USART clock */
-  __HAL_RCC_USART1_CLK_ENABLE(); 
-  
-  /*##-2- Configure peripheral GPIO ##########################################*/  
-  /* UART TX GPIO pin configuration  */
-  GPIO_InitStruct.Pin       = GPIO_PIN_9;
-  GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull      = GPIO_PULLUP;
-  GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF4_USART1;
-  
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    
-  /* UART RX GPIO pin configuration  */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
-  GPIO_InitStruct.Alternate = GPIO_AF4_USART1;
-    
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    LL_USART_ClearFlag_TC(USART2); 
 
-  /* NVIC for USART */
-  HAL_NVIC_SetPriority(USART1_IRQn, 3, 1);
-  HAL_NVIC_EnableIRQ(USART1_IRQn);
-}
+    /* Write character in Transmit Data register.
+       TXE flag is cleared by writing data in TDR register */
+    LL_USART_TransmitData8(USART2, c);
 
-/**
-  * @brief UART MSP De-Initialization 
-  *        This function frees the hardware resources used in this example:
-  *          - Disable the Peripheral's clock
-  *          - Revert GPIO and NVIC configuration to their default state
-  * @param huart: UART handle pointer
-  * @retval None
-  */
-void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
-{
-  /*##-1- Reset peripherals ##################################################*/
-    __HAL_RCC_USART1_FORCE_RESET();
-    __HAL_RCC_USART1_RELEASE_RESET();
-
-  /*##-2- Disable peripherals and GPIO Clocks #################################*/
-  /* Configure UART Tx as alternate function  */
-  HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9);
-  /* Configure UART Rx as alternate function  */
-  HAL_GPIO_DeInit(GPIOA, GPIO_PIN_10);
-}
-
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-    gUARTTransmitBusy = 0;
-}
-
-void SERIAL_try_to_transmit_buffers()
-{
-    if(!gUARTTransmitBusy && gTransmitBufferLengths[gNextTransmitBuffer] > 0) {
-        gUARTTransmitBusy = 1;
-
-        if(HAL_UART_Transmit_IT(&gUARTHandle, (uint8_t *)&gTransmitBuffers[gNextTransmitBuffer][0], gTransmitBufferLengths[gNextTransmitBuffer]) != HAL_OK) {
-            panic();
-        }
-
-        gNextTransmitBuffer ^= 1;
-        gTransmitBufferLengths[gNextTransmitBuffer] = 0;
-    }
-}
-
-void SERIAL_flush()
-{
-    while(gUARTTransmitBusy || gTransmitBufferLengths[gNextTransmitBuffer] > 0)
-        SERIAL_try_to_transmit_buffers();
-}
-
-void SERIAL_enqueue_one_char(char c)
-{
-    do {
-        // Transmit the current buffer if there is one and serial
-        // port is not busy
-        SERIAL_try_to_transmit_buffers();
-
-        // While there's no room in the current buffer, repeat until buffer becomes available
-    } while(gTransmitBufferLengths[gNextTransmitBuffer] >= TRANSMIT_BUFFER_SIZE);
-
-    int length = gTransmitBufferLengths[gNextTransmitBuffer];
-    gTransmitBuffers[gNextTransmitBuffer][length] = c;
-    gTransmitBufferLengths[gNextTransmitBuffer]++;
+    /* Wait for TC flag to be raised for last char */
+    while (!LL_USART_IsActiveFlag_TC(USART2));
 }
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
@@ -116,59 +34,80 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
     panic();
 }
 
-volatile char gSerialCharBuffer;
-volatile char gStartAnotherUARTReceive = 1;
-
-extern void uart_received(char c);
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+/**
+  * @brief  This function configures USART2 Instance.
+  * @note   This function is used to :
+  *         -1- Enable GPIO clock and configures the USART pins.
+  *         -2- Enable the USART peripheral clock and clock source.
+  *         -3- Configure USART functional parameters.
+  *         -4- Enable USART.
+  * @note   Peripheral configuration is minimal configuration from reset values.
+  *         Thus, some useless LL unitary functions calls below are provided as
+  *         commented examples - setting is default configuration from reset.
+  * @param  None
+  * @retval None
+  */
+void SERIAL_init(void)
 {
-    uart_received(gSerialCharBuffer);
-    gStartAnotherUARTReceive = 1;
+  /* (1) Enable GPIO clock and configures the USART pins *********************/
+
+  /* Enable the peripheral clock of GPIO Port */
+  LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);
+
+  /* Configure Tx Pin as : Alternate function, High Speed, Push pull, Pull up */
+  LL_GPIO_SetPinMode(GPIOA, GPIO_PIN_9, LL_GPIO_MODE_ALTERNATE);
+  LL_GPIO_SetAFPin_8_15(GPIOA, LL_GPIO_PIN_9, LL_GPIO_AF_4);
+  LL_GPIO_SetPinSpeed(GPIOA, GPIO_PIN_9, LL_GPIO_SPEED_FREQ_HIGH);
+  LL_GPIO_SetPinOutputType(GPIOA, GPIO_PIN_9, LL_GPIO_OUTPUT_PUSHPULL);
+  LL_GPIO_SetPinPull(GPIOA, GPIO_PIN_9, LL_GPIO_PULL_UP);
+
+  /* Configure Rx Pin as : Alternate function, High Speed, Push pull, Pull up */
+  LL_GPIO_SetPinMode(GPIOA, GPIO_PIN_10, LL_GPIO_MODE_ALTERNATE);
+  LL_GPIO_SetAFPin_8_15(GPIOA, LL_GPIO_PIN_10, LL_GPIO_AF_4);
+  LL_GPIO_SetPinSpeed(GPIOA, GPIO_PIN_10, LL_GPIO_SPEED_FREQ_HIGH);
+  LL_GPIO_SetPinOutputType(GPIOA, GPIO_PIN_10, LL_GPIO_OUTPUT_PUSHPULL);
+  LL_GPIO_SetPinPull(GPIOA, GPIO_PIN_10, LL_GPIO_PULL_UP);
+
+  /* (2) Enable USART peripheral clock and clock source ***********************/
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_USART2);
+
+  /* Set clock source */
+  LL_RCC_SetUSARTClockSource(LL_RCC_USART2_CLKSOURCE_PCLK1);
+
+  /* (3) Configure USART functional parameters ********************************/
+  
+  /* Disable USART prior modifying configuration registers */
+  /* Note: Commented as corresponding to Reset value */
+  // LL_USART_Disable(USART2);
+
+  /* TX/RX direction */
+  LL_USART_SetTransferDirection(USART2, LL_USART_DIRECTION_TX_RX);
+
+  /* 8 data bit, 1 start bit, 1 stop bit, no parity */
+  LL_USART_ConfigCharacter(USART2, LL_USART_DATAWIDTH_8B, LL_USART_PARITY_NONE, LL_USART_STOPBITS_1);
+
+  /* No Hardware Flow control */
+  /* Reset value is LL_USART_HWCONTROL_NONE */
+  // LL_USART_SetHWFlowCtrl(USART2, LL_USART_HWCONTROL_NONE);
+
+  /* Oversampling by 16 */
+  /* Reset value is LL_USART_OVERSAMPLING_16 */
+  // LL_USART_SetOverSampling(USART2, LL_USART_OVERSAMPLING_16);
+
+  /* Set Baudrate to 115200 using APB frequency set to 16000000 Hz */
+  /* Frequency available for USART peripheral can also be calculated through LL RCC macro */
+  /* Ex :
+      Periphclk = LL_RCC_GetUSARTClockFreq(Instance); or LL_RCC_GetUARTClockFreq(Instance); depending on USART/UART instance
+  
+      In this example, Peripheral Clock is expected to be equal to 16000000 Hz => equal to SystemCoreClock
+  */
+  LL_USART_SetBaudRate(USART2, SystemCoreClock, LL_USART_OVERSAMPLING_16, 115200); 
+
+  /* (4) Enable USART *********************************************************/
+  LL_USART_Enable(USART2);
+
+  /* Polling USART initialisation */
+  while((!(LL_USART_IsActiveFlag_TEACK(USART2))) || (!(LL_USART_IsActiveFlag_REACK(USART2))))
+  { 
+  }
 }
-
-void SERIAL_init()
-{
-    /*##-1- Configure the UART peripheral ######################################*/
-    /* Put the USART peripheral in the Asynchronous mode (UART Mode) */
-    /* UART1 configured as follow:
-        - Word Length = 8 Bits
-        - Stop Bit = One Stop bit
-        - Parity = ODD parity
-        - BaudRate = 115200 baud
-        - Hardware flow control disabled (RTS and CTS signals) */
-    gUARTHandle.Instance          = USART1;
-    
-    gUARTHandle.Init.BaudRate     = 115200;
-    gUARTHandle.Init.WordLength   = UART_WORDLENGTH_8B;
-    gUARTHandle.Init.StopBits     = UART_STOPBITS_1;
-    gUARTHandle.Init.Parity       = UART_PARITY_NONE;
-    gUARTHandle.Init.HwFlowCtl    = UART_HWCONTROL_RTS_CTS;
-    gUARTHandle.Init.Mode         = UART_MODE_TX_RX;
-    gUARTHandle.Init.OverSampling = UART_OVERSAMPLING_16;
-      
-    if(HAL_UART_Init(&gUARTHandle) != HAL_OK)
-    {
-      /* Initialization Error */
-      panic(); 
-    }
-
-    if(HAL_UART_Receive_IT(&gUARTHandle, (uint8_t *)&gSerialCharBuffer, 1) != HAL_OK)
-    {
-      /* Transfer error in reception process */
-      panic();
-    }
-}
-
-void SERIAL_poll_continue()
-{
-    // This is terrible; UART interrupt should fill a buffer and we should examine in here, not poll
-    if(gStartAnotherUARTReceive) {
-        gStartAnotherUARTReceive = 0;
-        int result;
-        if((result = HAL_UART_Receive_IT(&gUARTHandle, (uint8_t *)&gSerialCharBuffer, 1)) != HAL_OK) {
-            /* error_code = gUARTHandle.State; */
-        }
-    }
-}
-

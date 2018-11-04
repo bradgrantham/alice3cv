@@ -2,7 +2,8 @@ FIRMWARE_VERSION    := $(shell date)
 
 PROJECT         = cvhat
 
-OPT             =       -O2 -g
+# OPT             =       -O2 -g
+OPT             =       -O2
 
 TOOLROOT        ?=      $(HOME)/packages/gcc-arm-none-eabi-7-2018-q2-update
 STM32LCUBEROOT  ?=      $(HOME)/packages/STM32Cube_FW_L0_V1.10.0/
@@ -16,8 +17,9 @@ CMSIS_CORE_INC_PATH         = $(STM32LCUBEROOT)/Drivers/CMSIS/Include/
 
 INC_PATHS                = -I$(CMSIS_DEVICE_INC_PATH) -I$(HAL_INC_PATH) -I$(CMSIS_CORE_INC_PATH) -I.
 
-        # uart.o \
-        # HAL/stm32l0xx_hal_uart.o \
+NOPE = \
+        logprintf.o \
+        $(NULL)
 
 OBJECTS = \
         main.o \
@@ -25,14 +27,15 @@ OBJECTS = \
         stm32l0xx_it.o \
         HAL/system_stm32l0xx.o \
         HAL/stm32l0xx_hal_cortex.o \
-        HAL/stm32l0xx_hal_gpio.o \
         HAL/stm32l0xx_hal_rcc.o \
+        HAL/stm32l0xx_hal_gpio.o \
         HAL/stm32l0xx_hal.o \
         syscalls.o \
         delay.o \
         leds.o \
         utility.o \
-        logprintf.o \
+        uart.o \
+        HAL/stm32l0xx_hal_uart.o \
         $(NULL)
 
 SOURCES = $(OBJECTS:.o=.c)
@@ -43,8 +46,9 @@ $(PROJECT).hex: $(PROJECT).elf
 
 -include $(DEPS)
 
+# --no-undefined
 $(PROJECT).elf:  $(OBJECTS)
-	$(TOOLROOT)/bin/arm-none-eabi-gcc $(OPT) $(CORTEX_M0_CC_FLAGS) -D$(TARGET) -TSTM32L011G4U6_FLASH.ld -lm -Wl,--gc-sections $^ -o $@
+	$(TOOLROOT)/bin/arm-none-eabi-g++ $(OPT) $(CORTEX_M0_CC_FLAGS) -D$(TARGET) -TSTM32L011G4U6_FLASH.ld -lm -Wl,--gc-sections $^ -o $@
 
 startup_stm32l011xx.o: startup_stm32l011xx.s
 	$(TOOLROOT)/bin/arm-none-eabi-gcc -Wall $(OPT) $(CORTEX_M4_HWFP_CC_FLAGS)  $< -c -o $@
@@ -64,10 +68,7 @@ startup_stm32l011xx.o: startup_stm32l011xx.s
 clean:
 	rm -f *.hex *.elf *.o $(OBJECTS) $(DEPS)
 
-$(PROJECT).dfu: $(PROJECT).hex
-	python dfu-convert -i $(PROJECT).hex $(PROJECT).dfu
-
-burn: $(PROJECT).dfu
-	sudo dfu-util -d 0483:df11 -a 0 -D $(PROJECT).dfu
+burn: $(PROJECT).hex
+	../../../stm32flash/stm32flash -e 128 -w cvhat.hex -v /dev/tty.usbserial-AL00EUTE
 
 # DO NOT DELETE
