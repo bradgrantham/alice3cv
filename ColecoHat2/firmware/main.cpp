@@ -358,7 +358,33 @@ int main()
 
         HAL_GPIO_WritePin(select_keypad_1.port, select_keypad_1.mask, GPIO_PIN_RESET);
 
-        // probe keypad
+        unsigned int keypad_value = 
+            ((HAL_GPIO_ReadPin(joystick_1_north.port, joystick_1_north.mask) << 0) | 
+            (HAL_GPIO_ReadPin(joystick_1_east.port, joystick_1_east.mask) << 1) | 
+            (HAL_GPIO_ReadPin(joystick_1_south.port, joystick_1_south.mask) << 2) | 
+            (HAL_GPIO_ReadPin(joystick_1_west.port, joystick_1_west.mask) << 3)) ^ 0xF;
+
+        switch(keypad_value & CONTROLLER_KEYPAD_MASK) {
+            case CONTROLLER_KEYPAD_0: print("KEYPAD 0\n"); break;
+            case CONTROLLER_KEYPAD_1: print("KEYPAD 1\n"); break;
+            case CONTROLLER_KEYPAD_2: print("KEYPAD 2\n"); break;
+            case CONTROLLER_KEYPAD_3: print("KEYPAD 3\n"); break;
+            case CONTROLLER_KEYPAD_4: print("KEYPAD 4\n"); break;
+            case CONTROLLER_KEYPAD_5: print("KEYPAD 5\n"); break;
+            case CONTROLLER_KEYPAD_6: print("KEYPAD 6\n"); break;
+            case CONTROLLER_KEYPAD_7: print("KEYPAD 7\n"); break;
+            case CONTROLLER_KEYPAD_8: print("KEYPAD 8\n"); break;
+            case CONTROLLER_KEYPAD_9: print("KEYPAD 9\n"); break;
+            case CONTROLLER_KEYPAD_asterisk: print("KEYPAD asterisk\n"); break;
+            case CONTROLLER_KEYPAD_pound: print("KEYPAD pound\n"); break;
+            case 0x7: print("KEYPAD UNKNOWN - 0x7\n"); break;
+            case 0xB: print("KEYPAD UNKNOWN - 0xB\n"); break;
+            case 0xF: print("KEYPAD UNKNOWN - 0xF\n"); break;
+        };
+
+        on = HAL_GPIO_ReadPin(joystick_1_fire.port, joystick_1_fire.mask);
+        if(!on)
+            print("FR1\n");
 
         HAL_GPIO_WritePin(select_keypad_1.port, select_keypad_1.mask, GPIO_PIN_SET);
 
