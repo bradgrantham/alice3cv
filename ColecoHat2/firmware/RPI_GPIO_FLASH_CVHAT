@@ -1,0 +1,1 @@
+/home/pi/trees/stm32flash/stm32flash -i 6,-13,13:-6,-13,13 -e 128 -w cvhat.hex -v -g 0x0 /dev/ttyAMA0

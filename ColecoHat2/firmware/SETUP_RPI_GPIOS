@@ -1,0 +1,6 @@
+gpio -g write 6 0
+gpio -g write 13 1
+gpio -g mode 6 out
+gpio -g mode 13 out
+gpio export 6 out
+gpio export 13 out
