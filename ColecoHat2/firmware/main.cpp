@@ -440,12 +440,8 @@ I2C_HandleTypeDef i2c_handle;
 #define I2C_ADDRESS	0x5A
 #define I2C_ADDRESS_CODE	(I2C_ADDRESS << 1) // ARGH all of STM32's LL calls take I2C_ADDRESS << 1
 
-#define I2C_MAX_RECEIVE_LENGTH 8
-volatile static uint32_t i2c_receive_length = 0;
-volatile static bool i2c_receive_overflowed = false;
 const char * volatile i2c_error = NULL;
 const char * volatile i2c_info = NULL;
-volatile static uint8_t i2c_receive_buffer[I2C_MAX_RECEIVE_LENGTH];
 
 /*
     - on last bit, data is stored in RXDR if RXNE=0.  If RXNE=1, clock is stretched until RXNE=0
@@ -455,14 +451,25 @@ volatile static uint8_t i2c_receive_buffer[I2C_MAX_RECEIVE_LENGTH];
     - When the I2C is selected by one of its enabled addresses, ADDR interrupt status flag is set, and interrupt generated if ADDRIE is set then clear ADDRCF
 */
 
-volatile bool an_interrupt = false;
 volatile bool i2c_underrun = false;
+
+const uint8_t CVHAT_CONFIG = 0x10;
+const uint8_t CVHAT_JOYSTICK_1 = 0x20;
+const uint8_t CVHAT_JOYSTICK_1_CHANGED = 0x21;
+const uint8_t CVHAT_KEYPAD_1 = 0x22;
+const uint8_t CVHAT_KEYPAD_1_CHANGED = 0x23;
+const uint8_t CVHAT_JOYSTICK_2 = 0x24;
+const uint8_t CVHAT_JOYSTICK_2_CHANGED = 0x25;
+const uint8_t CVHAT_KEYPAD_2 = 0x26;
+const uint8_t CVHAT_KEYPAD_2_CHANGED = 0x27;
+
+bool i2c_unknown_register_requested = false;
+uint8_t i2c_unknown_register ;
 
 extern "C" {
 
 void I2C1_IRQHandler(void)
 {
-    an_interrupt = true;
     if(LL_I2C_IsActiveFlag_ADDR(I2C1)) {
 
 	/* Clear ADDR flag value in ISR register */
@@ -498,10 +505,39 @@ void I2C1_IRQHandler(void)
 
     } else if(LL_I2C_IsActiveFlag_RXNE(I2C1)) {
 
-	if(i2c_receive_length >= I2C_MAX_RECEIVE_LENGTH)
-	    i2c_receive_overflowed = true;
-	else
-	    i2c_receive_buffer[i2c_receive_length++] = LL_I2C_ReceiveData8(I2C1);
+	uint8_t reg = LL_I2C_ReceiveData8(I2C1);
+
+	switch(reg) {
+	    case CVHAT_JOYSTICK_1:
+		LL_I2C_TransmitData8(I2C1, joystick_1_state);
+		break;
+	    case CVHAT_JOYSTICK_1_CHANGED:
+		LL_I2C_TransmitData8(I2C1, joystick_1_changed);
+		break;
+	    case CVHAT_KEYPAD_1:
+		LL_I2C_TransmitData8(I2C1, keypad_1_state);
+		break;
+	    case CVHAT_KEYPAD_1_CHANGED:
+		LL_I2C_TransmitData8(I2C1, keypad_1_changed);
+		break;
+	    case CVHAT_JOYSTICK_2:
+		LL_I2C_TransmitData8(I2C1, joystick_2_state);
+		break;
+	    case CVHAT_JOYSTICK_2_CHANGED:
+		LL_I2C_TransmitData8(I2C1, joystick_2_changed);
+		break;
+	    case CVHAT_KEYPAD_2:
+		LL_I2C_TransmitData8(I2C1, keypad_2_state);
+		break;
+	    case CVHAT_KEYPAD_2_CHANGED:
+		LL_I2C_TransmitData8(I2C1, keypad_2_changed);
+		break;
+	    default:
+	        i2c_unknown_register_requested = true;
+	        i2c_unknown_register = reg;
+		LL_I2C_TransmitData8(I2C1, 0xff);
+		break;
+	}
 
     } else if(LL_I2C_IsActiveFlag_STOP(I2C1)) {
 
@@ -758,24 +794,15 @@ int main()
 	disable_interrupts();
 
 	    {
+	        if(i2c_unknown_register_requested) {
+		    print("unknown register ");
+		    print_decimal(i2c_unknown_register);
+		    print(" requested\n");
+		}
 		if(i2c_underrun) {
 		    if(false) print("I2C underrun - i2cdetect?\n");
 		    i2c_underrun = false;
 		}
-
-		if(i2c_receive_overflowed) {
-		    print("warning: I2C receive buffer overflowed!\n");
-		    i2c_receive_overflowed = false;
-		}
-
-		for(uint32_t i = 0; i < i2c_receive_length; i++) {
-		    int n = i2c_receive_buffer[i];
-		    print("I2C ");
-		    print_decimal(n);
-		    print("\n");
-		}
-
-		i2c_receive_length = 0;
 	    }
 
 	enable_interrupts();
