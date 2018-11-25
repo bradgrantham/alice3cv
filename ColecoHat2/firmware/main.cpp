@@ -4,6 +4,12 @@
 #include "uart.h"
 #include "defs.h"
 
+#include "stm32l0xx_ll_bus.h"
+#include "stm32l0xx_ll_rcc.h"
+#include "stm32l0xx_ll_exti.h"
+#include "stm32l0xx_ll_gpio.h"
+#include "stm32l0xx_ll_i2c.h"
+
 extern "C" {
 
 void panic_worse()
@@ -429,12 +435,209 @@ void probe_controller_2(void)
     keypad_2_state = keypad_value;
 }
 
+I2C_HandleTypeDef i2c_handle;
+#define I2C_TIMING    0x10A13E56 /* 100 kHz with analog Filter ON, Rise Time 400ns, Fall Time 100ns */ 
+#define I2C_ADDRESS	0x5A
+#define I2C_ADDRESS_CODE	(I2C_ADDRESS << 1) // ARGH all of STM32's LL calls take I2C_ADDRESS << 1
+
+#define I2C_MAX_RECEIVE_LENGTH 8
+volatile static uint32_t i2c_receive_length = 0;
+volatile static bool i2c_receive_overflowed = false;
+const char * volatile i2c_error = NULL;
+const char * volatile i2c_info = NULL;
+volatile static uint8_t i2c_receive_buffer[I2C_MAX_RECEIVE_LENGTH];
+
+/*
+    - on last bit, data is stored in RXDR if RXNE=0.  If RXNE=1, clock is stretched until RXNE=0
+    - transmit byte in TXDR if TXE=0
+    - TXIS is generated when I2C_TXDR becomes empty, interrupt is generated if TXIE is set in I2C_CR1
+        - TXIS is cleared when I2C_TXDR is written with the next byte to transmit
+    - When the I2C is selected by one of its enabled addresses, ADDR interrupt status flag is set, and interrupt generated if ADDRIE is set then clear ADDRCF
+*/
+
+volatile bool an_interrupt = false;
+volatile bool i2c_underrun = false;
+
+extern "C" {
+
+void I2C1_IRQHandler(void)
+{
+    an_interrupt = true;
+    if(LL_I2C_IsActiveFlag_ADDR(I2C1)) {
+
+	/* Clear ADDR flag value in ISR register */
+	LL_I2C_ClearFlag_ADDR(I2C1);
+
+	if(LL_I2C_GetAddressMatchCode(I2C1) == I2C_ADDRESS_CODE) {
+
+	    /* Verify the transfer direction, a read direction, Slave enters transmitter mode */
+	    if(LL_I2C_GetTransferDirection(I2C1) == LL_I2C_DIRECTION_READ) {
+		/* Enable Transmit Interrupt */
+		// LL_I2C_EnableIT_TX(I2C1);
+		i2c_info = "i2c read from this slave";
+	    }
+
+	} else {
+	      
+	    i2c_info = "wrong address?";
+	}
+
+    } else if(LL_I2C_IsActiveFlag_OVR(I2C1)) {
+
+	/* overrun or underrun */
+	/* i2cdetect will cause this because it tries to read a byte */
+	LL_I2C_ClearFlag_OVR(I2C1);
+	i2c_underrun = true;
+
+    } else if(LL_I2C_IsActiveFlag_NACK(I2C1)) {
+
+	/* Check NACK flag value in ISR register */
+	/* End of Transfer */
+	LL_I2C_ClearFlag_NACK(I2C1);
+	i2c_info = "NACK?";
+
+    } else if(LL_I2C_IsActiveFlag_RXNE(I2C1)) {
+
+	if(i2c_receive_length >= I2C_MAX_RECEIVE_LENGTH)
+	    i2c_receive_overflowed = true;
+	else
+	    i2c_receive_buffer[i2c_receive_length++] = LL_I2C_ReceiveData8(I2C1);
+
+    } else if(LL_I2C_IsActiveFlag_STOP(I2C1)) {
+
+        /* Clear STOP flag value in ISR register */
+        LL_I2C_ClearFlag_STOP(I2C1);
+  
+        /* Call function Slave Complete Callback */
+        // Slave_Complete_Callback();
+
+    } else if(!LL_I2C_IsActiveFlag_TXE(I2C1)) {
+
+	/* Check TXE flag value in ISR register */
+        /* Do nothing */
+        /* This Flag will be set by hardware when the TXDR register is empty */
+        /* If needed, use LL_I2C_ClearFlag_TXE() interface to flush the TXDR register  */
+
+    } else {
+
+	NVIC_DisableIRQ(I2C1_IRQn);
+	i2c_error = "i2c error";
+    }
+}
+
+}
+
+void Configure_I2C_Slave(void)
+{
+    // LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);
+  
+    /* Configure SCL Pin as : Alternate function, High Speed, Open drain, Pull up */
+    LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_6, LL_GPIO_MODE_ALTERNATE);
+    LL_GPIO_SetAFPin_0_7(GPIOB, LL_GPIO_PIN_6, LL_GPIO_AF_1);
+    LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_6, LL_GPIO_SPEED_FREQ_HIGH);
+    LL_GPIO_SetPinOutputType(GPIOB, LL_GPIO_PIN_6, LL_GPIO_OUTPUT_OPENDRAIN);
+    // LL_GPIO_SetPinPull(GPIOB, LL_GPIO_PIN_6, LL_GPIO_PULL_UP); // RasPi has pullups
+  
+    /* Configure SDA Pin as : Alternate function, High Speed, Open drain, Pull up */
+    LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_7, LL_GPIO_MODE_ALTERNATE);
+    LL_GPIO_SetAFPin_0_7(GPIOB, LL_GPIO_PIN_7, LL_GPIO_AF_1);
+    LL_GPIO_SetPinSpeed(GPIOB, LL_GPIO_PIN_7, LL_GPIO_SPEED_FREQ_HIGH);
+    LL_GPIO_SetPinOutputType(GPIOB, LL_GPIO_PIN_7, LL_GPIO_OUTPUT_OPENDRAIN);
+    // LL_GPIO_SetPinPull(GPIOB, LL_GPIO_PIN_7, LL_GPIO_PULL_UP); // RasPi has pullups
+  
+    /* (2) Enable the I2C1 peripheral clock and I2C1 clock source ***************/
+  
+    /* Enable the peripheral clock for I2C1 */
+    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_I2C1);
+  
+    /* Set I2C1 clock source as SYSCLK */
+    LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_SYSCLK);
+  
+    /* (3) Configure NVIC for I2C1 **********************************************/
+  
+    /* Configure Event and Error IT:
+     *  - Set priority for I2C1_IRQn
+     *  - Enable I2C1_IRQn
+     */
+    NVIC_SetPriority(I2C1_IRQn, 0);
+    NVIC_EnableIRQ(I2C1_IRQn);
+  
+    /* (4) Configure I2C1 functional parameters *********************************/
+  
+    /* Disable I2C1 prior modifying configuration registers */
+    LL_I2C_Disable(I2C1);
+  
+    /* Configure the SDA setup, hold time and the SCL high, low period */
+    /* Timing register value is computed with the STM32CubeMX Tool,
+      * Fast Mode @400kHz with I2CCLK = 32 MHz,
+      * rise time = 100ns, fall time = 10ns
+      * Timing Value = (uint32_t)0x00601B28
+      */
+    // uint32_t timing = __LL_I2C_CONVERT_TIMINGS(0x0, 0x6, 0x0, 0x1B, 0x28);
+    // LL_I2C_SetTiming(I2C1, timing);
+    LL_I2C_SetTiming(I2C1, I2C_TIMING);
+  
+    LL_I2C_SetOwnAddress1(I2C1, I2C_ADDRESS_CODE, LL_I2C_OWNADDRESS1_7BIT);
+    LL_I2C_EnableOwnAddress1(I2C1);
+    // I2C1->OAR1 |= (uint32_t)(I2C_ADDRESS << 1); /* (5) */
+    // I2C1->OAR1 |= I2C_OAR1_OA1EN; /* (6) */
+  
+    LL_I2C_DisableClockStretching(I2C1);
+  
+    //LL_I2C_SetDigitalFilter(I2C1, 0x00); // default
+  
+    //LL_I2C_EnableAnalogFilter(I2C1); // default
+
+    LL_I2C_TransmitData8(I2C1, 0x0); // Put 0 on the bus for i2cdetect
+  
+    LL_I2C_Enable(I2C1);
+
+  
+    /* (6) Enable I2C1 address match/error interrupts:
+     *  - Enable Address Match Interrupt
+     *  - Enable Not acknowledge received interrupt
+     *  - Enable Error interrupts
+     *  - Enable Stop interrupt
+     */
+    LL_I2C_EnableIT_RX(I2C1);
+    LL_I2C_EnableIT_ADDR(I2C1);
+    LL_I2C_EnableIT_NACK(I2C1);
+    LL_I2C_EnableIT_ERR(I2C1);
+    LL_I2C_EnableIT_STOP(I2C1);
+}
+
+void print_hex(uint32_t n)
+{
+    for(int i = 28; i >= 0 ; i -= 4) {
+	uint32_t nybble = (n >> i) & 0xFu;
+	if(nybble < 10)
+	    SERIAL_send_one_char('0' + nybble);
+	else
+	    SERIAL_send_one_char('A' + nybble - 10);
+    }
+}
+
+void print_decimal(int n)
+{
+    bool keep_printing = false;
+    if(n / 100 > 0) {
+        keep_printing = true;
+        SERIAL_send_one_char('0' + n / 100);
+    }
+    if(keep_printing || ((n % 100) / 10 > 0)) {
+        keep_printing = true;
+        SERIAL_send_one_char('0' + (n % 100) / 10);
+    }
+    SERIAL_send_one_char('0' + n % 10);
+}
 
 int main()
 {
     system_init();
 
     SERIAL_init();
+
+    Configure_I2C_Slave();
 
     LED_init();
 
@@ -448,6 +651,9 @@ int main()
     print("firmware ");
     print(XSTR(FIRMWARE_VERSION));
     print(" OK\n");
+
+    print_hex(0xF5A809EB);
+    print(" = print_hex(0xF5A809EB)\n");
 
     init_controller_1();
     init_controller_2();
@@ -534,7 +740,53 @@ int main()
 
         keypad_2_changed = 0;
 
-        delay_ms(100);
+	if(i2c_info != NULL) {
+	    print(i2c_info);
+	    print(", ISR :");
+            print_hex(I2C1->ISR);
+	    print("\n");
+	    i2c_info = NULL;
+	}
+	if(i2c_error != NULL) {
+	    print(i2c_error);
+	    print(", ISR :");
+            print_hex(I2C1->ISR);
+	    print("\n");
+	    panic();
+	}
+	disable_interrupts();
+
+	    {
+		// Critical Section for I2C
+		if(an_interrupt) {
+		    print("I2C interrupt!\n");
+		    an_interrupt = false;
+		}
+		if(i2c_underrun) {
+		    print("I2C underrun - i2cdetect?\n");
+		    i2c_underrun = false;
+		}
+		if(LL_I2C_IsActiveFlag_ADDR(I2C1)) {
+		    print("i2c addr!\n");
+		    LL_I2C_ClearFlag_ADDR(I2C1);
+		}
+
+		if(i2c_receive_overflowed) {
+		    print("I2C receive buffer overflowed!\n");
+		    i2c_receive_overflowed = false;
+		}
+
+		for(uint32_t i = 0; i < i2c_receive_length; i++) {
+		    int n = i2c_receive_buffer[i];
+		    print("I2C ");
+		    print_decimal(n);
+		    print("\n");
+		}
+
+		i2c_receive_length = 0;
+	    }
+
+	enable_interrupts();
     }
 
     panic();
