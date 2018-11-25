@@ -494,7 +494,7 @@ void I2C1_IRQHandler(void)
 	/* Check NACK flag value in ISR register */
 	/* End of Transfer */
 	LL_I2C_ClearFlag_NACK(I2C1);
-	i2c_info = "NACK?";
+	i2c_info = "NACK";
 
     } else if(LL_I2C_IsActiveFlag_RXNE(I2C1)) {
 
@@ -740,7 +740,7 @@ int main()
 
         keypad_2_changed = 0;
 
-	if(i2c_info != NULL) {
+	if(false && (i2c_info != NULL)) {
 	    print(i2c_info);
 	    print(", ISR :");
             print_hex(I2C1->ISR);
@@ -759,20 +759,20 @@ int main()
 	    {
 		// Critical Section for I2C
 		if(an_interrupt) {
-		    print("I2C interrupt!\n");
+		    if(false) print("I2C interrupt!\n");
 		    an_interrupt = false;
 		}
 		if(i2c_underrun) {
-		    print("I2C underrun - i2cdetect?\n");
+		    if(false) print("I2C underrun - i2cdetect?\n");
 		    i2c_underrun = false;
 		}
 		if(LL_I2C_IsActiveFlag_ADDR(I2C1)) {
-		    print("i2c addr!\n");
+		    if(false) print("i2c addr!\n");
 		    LL_I2C_ClearFlag_ADDR(I2C1);
 		}
 
 		if(i2c_receive_overflowed) {
-		    print("I2C receive buffer overflowed!\n");
+		    print("warning: I2C receive buffer overflowed!\n");
 		    i2c_receive_overflowed = false;
 		}
 
