@@ -754,21 +754,13 @@ int main()
 	    print("\n");
 	    panic();
 	}
+
 	disable_interrupts();
 
 	    {
-		// Critical Section for I2C
-		if(an_interrupt) {
-		    if(false) print("I2C interrupt!\n");
-		    an_interrupt = false;
-		}
 		if(i2c_underrun) {
 		    if(false) print("I2C underrun - i2cdetect?\n");
 		    i2c_underrun = false;
-		}
-		if(LL_I2C_IsActiveFlag_ADDR(I2C1)) {
-		    if(false) print("i2c addr!\n");
-		    LL_I2C_ClearFlag_ADDR(I2C1);
 		}
 
 		if(i2c_receive_overflowed) {
