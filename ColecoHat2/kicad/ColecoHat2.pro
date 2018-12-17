@@ -57,5 +57,6 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=STM32L011G4U6
+LibName31=STM32L041K6U6
 [general]
 version=1

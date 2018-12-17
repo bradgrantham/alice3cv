@@ -29,6 +29,7 @@ LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:STM32L011G4U6
+LIBS:STM32L041K6U6
 LIBS:ColecoHat2-cache
 EELAYER 25 0
 EELAYER END
@@ -47,21 +48,21 @@ $EndDescr
 $Comp
 L DB9_FEMALE_MountingHoles J1
 U 1 1 5BAF9A20
-P 5175 1700
-F 0 "J1" H 5175 2350 50  0000 C CNN
-F 1 "CTRL1" H 5175 2275 50  0000 C CNN
-F 2 "Connectors:DB9FD" H 5175 1700 50  0001 C CNN
-F 3 "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/c01-8646-0826.pdf" H 5175 1700 50  0001 C CNN
-F 4 "Amphenol" H 5175 1700 60  0001 C CNN "Manufacturer"
-F 5 "D09P33E4GX00LF" H 5175 1700 60  0001 C CNN "Manufacturer PN"
-F 6 "Digikey" H 5175 1700 60  0001 C CNN "Distributor"
-F 7 "609-1481-ND" H 5175 1700 60  0001 C CNN "Distributor PN"
-F 8 "https://www.digikey.com/product-detail/en/D09P33E4GX00LF/609-1481-ND/1001795/?itemSeq=273161785" H 8225 1675 50  0001 C CNN "Distributor URL"
-F 9 "DB-9 right-angle TH" H 5175 1700 60  0001 C CNN "Description"
-F 10 "9POS" H 5175 1700 60  0001 C CNN "Package"
-F 11 "thru-hole" H 5175 1700 60  0001 C CNN "Type"
-F 12 "do not place" H 5175 1700 60  0001 C CNN "Do Not Place"
-	1    5175 1700
+P 6200 1700
+F 0 "J1" H 6200 2350 50  0000 C CNN
+F 1 "CTRL1" H 6200 2275 50  0000 C CNN
+F 2 "Connectors:DB9MD" H 6200 1700 50  0001 C CNN
+F 3 "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/c01-8646-0826.pdf" H 6200 1700 50  0001 C CNN
+F 4 "Amphenol" H 6200 1700 60  0001 C CNN "Manufacturer"
+F 5 "D09P33E4GX00LF" H 6200 1700 60  0001 C CNN "Manufacturer PN"
+F 6 "Digikey" H 6200 1700 60  0001 C CNN "Distributor"
+F 7 "609-1481-ND" H 6200 1700 60  0001 C CNN "Distributor PN"
+F 8 "https://www.digikey.com/product-detail/en/D09P33E4GX00LF/609-1481-ND/1001795/?itemSeq=273161785" H 9250 1675 50  0001 C CNN "Distributor URL"
+F 9 "DB-9 right-angle TH" H 6200 1700 60  0001 C CNN "Description"
+F 10 "9POS" H 6200 1700 60  0001 C CNN "Package"
+F 11 "thru-hole" H 6200 1700 60  0001 C CNN "Type"
+F 12 "do not place" H 6200 1700 60  0001 C CNN "Do Not Place"
+	1    6200 1700
 	-1   0    0    1   
 $EndComp
 $Comp
@@ -70,7 +71,7 @@ U 1 1 5BAF9AF6
 P 8225 1675
 F 0 "J2" H 8225 2325 50  0000 C CNN
 F 1 "CTRL2" H 8225 2250 50  0000 C CNN
-F 2 "Connectors:DB9FD" H 8225 1675 50  0001 C CNN
+F 2 "Connectors:DB9MD" H 8225 1675 50  0001 C CNN
 F 3 "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/c01-8646-0826.pdf" H 8225 1675 50  0001 C CNN
 F 4 "Amphenol" H 5175 1700 60  0001 C CNN "Manufacturer"
 F 5 "D09P33E4GX00LF" H 5175 1700 60  0001 C CNN "Manufacturer PN"
@@ -109,12 +110,12 @@ $EndComp
 $Comp
 L GND #PWR03
 U 1 1 5BAF9F90
-P 4675 1100
-F 0 "#PWR03" H 4675 850 50  0001 C CNN
-F 1 "GND" H 4675 950 50  0000 C CNN
-F 2 "" H 4675 1100 50  0001 C CNN
-F 3 "" H 4675 1100 50  0001 C CNN
-	1    4675 1100
+P 5700 1100
+F 0 "#PWR03" H 5700 850 50  0001 C CNN
+F 1 "GND" H 5700 950 50  0000 C CNN
+F 2 "" H 5700 1100 50  0001 C CNN
+F 3 "" H 5700 1100 50  0001 C CNN
+	1    5700 1100
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -228,23 +229,23 @@ F 3 "" H 9725 5125 50  0001 C CNN
 	1    9725 5125
 	0    -1   -1   0   
 $EndComp
-Text GLabel 6300 1300 2    60   Input ~ 0
+Text GLabel 6500 1300 2    60   Input ~ 0
 SELECT_KEYPAD
-Text GLabel 9350 1275 2    60   Input ~ 0
+Text GLabel 8525 1275 2    60   Input ~ 0
 SELECT_KEYPAD
-Text GLabel 6300 1600 2    60   Input ~ 0
+Text GLabel 6850 1600 2    60   Input ~ 0
 SELECT_JOYSTICK
-Text GLabel 9350 1575 2    60   Input ~ 0
+Text GLabel 8875 1575 2    60   Input ~ 0
 SELECT_JOYSTICK
-Text GLabel 5475 2100 2    60   Output ~ 0
+Text GLabel 6500 2100 2    60   Output ~ 0
 N1
 Text GLabel 8525 2075 2    60   Output ~ 0
 N2
-Text GLabel 5475 1900 2    60   Output ~ 0
+Text GLabel 6500 1900 2    60   Output ~ 0
 S1
-Text GLabel 5475 1700 2    60   Output ~ 0
+Text GLabel 6500 1700 2    60   Output ~ 0
 W1
-Text GLabel 5475 1500 2    60   Output ~ 0
+Text GLabel 6500 1500 2    60   Output ~ 0
 E1
 Text GLabel 8525 1875 2    60   Output ~ 0
 S2
@@ -252,47 +253,47 @@ Text GLabel 8525 1675 2    60   Output ~ 0
 W2
 Text GLabel 8525 1475 2    60   Output ~ 0
 E2
-Text GLabel 5825 2000 2    60   Output ~ 0
+Text GLabel 6850 2000 2    60   Output ~ 0
 FIRE1
 Text GLabel 8875 1975 2    60   Output ~ 0
 FIRE2
-Text GLabel 4325 4350 0    60   Input ~ 0
-QUADB1
-Text GLabel 4325 4450 0    60   Input ~ 0
-E1
 Text GLabel 4325 4950 0    60   Input ~ 0
+QUADB1
+Text GLabel 4325 4850 0    60   Input ~ 0
+E1
+Text GLabel 4325 4350 0    60   Input ~ 0
 N1
-Text GLabel 5725 4450 2    60   Input ~ 0
+Text GLabel 5725 4850 2    60   Input ~ 0
 S2
 Text GLabel 4325 3950 0    60   Input ~ 0
 SELECT_JOYSTICK
-Text GLabel 5725 4850 2    60   Input ~ 0
+Text GLabel 5725 4450 2    60   Input ~ 0
 W2
 Text GLabel 4325 4050 0    60   Input ~ 0
 SELECT_KEYPAD
-Text GLabel 4325 4550 0    60   Input ~ 0
-W1
 Text GLabel 4325 4750 0    60   Input ~ 0
+W1
+Text GLabel 4325 4550 0    60   Input ~ 0
 S1
-Text GLabel 4325 4850 0    60   Input ~ 0
+Text GLabel 4325 4450 0    60   Input ~ 0
 FIRE1
-Text GLabel 5725 5150 2    60   Input ~ 0
+Text GLabel 5725 4350 2    60   Input ~ 0
 E2
-Text GLabel 5825 1800 2    60   Output ~ 0
+Text GLabel 6850 1800 2    60   Output ~ 0
 QUADA1
-Text GLabel 5825 1400 2    60   Output ~ 0
+Text GLabel 7275 1400 2    60   Output ~ 0
 QUADB1
 Text GLabel 8875 1775 2    60   Output ~ 0
 QUADA2
-Text GLabel 8875 1375 2    60   Output ~ 0
+Text GLabel 9375 1375 2    60   Output ~ 0
 QUADB2
 Text GLabel 4325 4650 0    60   Input ~ 0
 QUADA1
 Text GLabel 5725 4550 2    60   Input ~ 0
 QUADA2
-Text GLabel 5725 4350 2    60   Input ~ 0
+Text GLabel 5725 5150 2    60   Input ~ 0
 FIRE2
-Text GLabel 5725 4250 2    60   Input ~ 0
+Text GLabel 4325 5150 0    60   Input ~ 0
 N2
 NoConn ~ 8650 3825
 NoConn ~ 9150 3525
@@ -304,7 +305,7 @@ NoConn ~ 8650 4825
 NoConn ~ 9150 4825
 NoConn ~ 9150 4725
 NoConn ~ 9150 4625
-Text GLabel 4325 5150 0    60   Input ~ 0
+Text GLabel 5725 4250 2    60   Input ~ 0
 QUADB2
 $Comp
 L STM32L011G4U6 U1
@@ -542,32 +543,32 @@ $EndComp
 $Comp
 L SW_PUSH SW2
 U 1 1 5BB1121B
-P 3425 5025
-F 0 "SW2" H 3575 5135 50  0000 C CNN
-F 1 "RESET" H 3425 4945 50  0000 C CNN
-F 2 "Buttons_Switches_SMD:SW_SPST_PTS645" H 3425 5025 50  0001 C CNN
-F 3 "https://us.schurter.com/pdf/english/typ_6x6_mm_tact_switches.pdf" H 2000 1275 50  0001 C CNN
-F 4 "Schurter Inc." H 5175 1700 60  0001 C CNN "Manufacturer"
-F 5 "1301.9314" H 5175 1700 60  0001 C CNN "Manufacturer PN"
-F 6 "Digikey" H 5175 1700 60  0001 C CNN "Distributor"
-F 7 "486-3465-ND" H 5175 1700 60  0001 C CNN "Distributor PN"
-F 8 "https://www.digikey.com/product-detail/en/schurter-inc/1301.9314/486-3465-ND/2643951&?gclid=Cj0KCQjw6MHdBRCtARIsAEigMxGv53-v36nTFmMfWC6MNS-zyo1dOjraxFiKf3WQB5SDpUyg6YUwT6UaAkIgEALw_wcB" H 8225 1675 50  0001 C CNN "Distributor URL"
-F 9 "SPST switch off-mom gullwing" H 5175 1700 60  0001 C CNN "Description"
-F 10 "SMT 4P" H 5175 1700 60  0001 C CNN "Package"
-F 11 "SMD" H 5175 1700 60  0001 C CNN "Type"
-F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
-	1    3425 5025
+P 3425 5450
+F 0 "SW2" H 3575 5560 50  0000 C CNN
+F 1 "RESET" H 3425 5370 50  0000 C CNN
+F 2 "Buttons_Switches_SMD:SW_SPST_PTS645" H 3425 5450 50  0001 C CNN
+F 3 "https://us.schurter.com/pdf/english/typ_6x6_mm_tact_switches.pdf" H 2000 1700 50  0001 C CNN
+F 4 "Schurter Inc." H 5175 2125 60  0001 C CNN "Manufacturer"
+F 5 "1301.9314" H 5175 2125 60  0001 C CNN "Manufacturer PN"
+F 6 "Digikey" H 5175 2125 60  0001 C CNN "Distributor"
+F 7 "486-3465-ND" H 5175 2125 60  0001 C CNN "Distributor PN"
+F 8 "https://www.digikey.com/product-detail/en/schurter-inc/1301.9314/486-3465-ND/2643951&?gclid=Cj0KCQjw6MHdBRCtARIsAEigMxGv53-v36nTFmMfWC6MNS-zyo1dOjraxFiKf3WQB5SDpUyg6YUwT6UaAkIgEALw_wcB" H 8225 2100 50  0001 C CNN "Distributor URL"
+F 9 "SPST switch off-mom gullwing" H 5175 2125 60  0001 C CNN "Description"
+F 10 "SMT 4P" H 5175 2125 60  0001 C CNN "Package"
+F 11 "SMD" H 5175 2125 60  0001 C CNN "Type"
+F 12 "" H 5175 2125 60  0001 C CNN "Do Not Place"
+	1    3425 5450
 	0    -1   -1   0   
 $EndComp
 $Comp
 L GND #PWR024
 U 1 1 5BB1133D
-P 3425 5325
-F 0 "#PWR024" H 3425 5075 50  0001 C CNN
-F 1 "GND" H 3425 5175 50  0000 C CNN
-F 2 "" H 3425 5325 60  0000 C CNN
-F 3 "" H 3425 5325 60  0000 C CNN
-	1    3425 5325
+P 3425 5750
+F 0 "#PWR024" H 3425 5500 50  0001 C CNN
+F 1 "GND" H 3425 5600 50  0000 C CNN
+F 2 "" H 3425 5750 60  0000 C CNN
+F 3 "" H 3425 5750 60  0000 C CNN
+	1    3425 5750
 	-1   0    0    -1  
 $EndComp
 $Comp
@@ -586,15 +587,15 @@ L LED D1
 U 1 1 5BB12128
 P 4075 1700
 F 0 "D1" H 4075 1800 50  0000 C CNN
-F 1 "DEBUG LED" H 4075 1600 50  0000 C CNN
+F 1 "DEBUG" H 4075 1600 50  0000 C CNN
 F 2 "LEDs:LED_0805" H 4075 1700 50  0001 C CNN
-F 3 "https://katalog.we-online.de/led/datasheet/150080GS75000.pdf" H 4075 1700 50  0001 C CNN
+F 3 "https://katalog.we-online.de/led/datasheet/150080RS75000.pdf" H 4075 1700 50  0001 C CNN
 F 4 "Wurth" H 5175 1700 60  0001 C CNN "Manufacturer"
-F 5 "150080GS75000" H 5175 1700 60  0001 C CNN "Manufacturer PN"
+F 5 "150080RS75000" H 5175 1700 60  0001 C CNN "Manufacturer PN"
 F 6 "Digikey" H 5175 1700 60  0001 C CNN "Distributor"
-F 7 "732-4983-2-ND" H 5175 1700 60  0001 C CNN "Distributor PN"
-F 8 "https://www.digikey.com/product-detail/en/wurth-electronics-inc/150080GS75000/732-4983-2-ND/4489915" H 8225 1675 50  0001 C CNN "Distributor URL"
-F 9 "LED green" H 5175 1700 60  0001 C CNN "Description"
+F 7 "732-4984-2-ND" H 5175 1700 60  0001 C CNN "Distributor PN"
+F 8 "https://www.digikey.com/product-detail/en/wurth-electronics-inc/150080RS75000/732-4984-2-ND/4489918" H 8225 1675 50  0001 C CNN "Distributor URL"
+F 9 "LED red" H 5175 1700 60  0001 C CNN "Description"
 F 10 "0805" H 5175 1700 60  0001 C CNN "Package"
 F 11 "SMT" H 5175 1700 60  0001 C CNN "Type"
 F 12 "" H 5175 1700 60  0001 C CNN "Do Not Place"
@@ -606,7 +607,7 @@ L R R2
 U 1 1 5BB12129
 P 4075 1300
 F 0 "R2" V 4155 1300 50  0000 C CNN
-F 1 "220" V 4075 1300 50  0000 C CNN
+F 1 "470" V 4075 1300 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805" V 4005 1300 30  0001 C CNN
 F 3 "http://www.susumu.co.jp/common/pdf/n_catalog_partition05_en.pdf" H 4075 1300 30  0001 C CNN
 F 4 "Susumu" H 5175 1700 60  0001 C CNN "Manufacturer"
@@ -630,7 +631,7 @@ BOOTLOADER
 Wire Wire Line
 	950  1175 950  1300
 Wire Wire Line
-	5175 1100 4675 1100
+	6200 1100 5700 1100
 Wire Wire Line
 	7775 1075 8225 1075
 Wire Wire Line
@@ -650,25 +651,13 @@ Wire Wire Line
 Wire Wire Line
 	8075 4725 8650 4725
 Wire Wire Line
-	5475 1300 6300 1300
-Wire Wire Line
-	6300 1600 5475 1600
-Wire Wire Line
-	9350 1275 8525 1275
-Wire Wire Line
-	9350 1575 8525 1575
-Wire Wire Line
-	5825 2000 5475 2000
+	6500 1400 7275 1400
 Wire Wire Line
 	8875 1975 8525 1975
 Wire Wire Line
-	5825 1800 5475 1800
+	6850 1600 6500 1600
 Wire Wire Line
-	5825 1400 5475 1400
-Wire Wire Line
-	8875 1775 8525 1775
-Wire Wire Line
-	8875 1375 8525 1375
+	8875 1575 8525 1575
 Wire Wire Line
 	5725 5050 6400 5050
 Wire Wire Line
@@ -701,7 +690,7 @@ Wire Wire Line
 Wire Wire Line
 	4325 4150 3425 4150
 Wire Wire Line
-	3425 4150 3425 4725
+	3425 4150 3425 5150
 Wire Wire Line
 	3625 1150 4075 1150
 Wire Wire Line
@@ -720,38 +709,6 @@ Text GLabel 10075 3925 2    60   Input ~ 0
 USART1_TX
 Text GLabel 10075 3825 2    60   Output ~ 0
 USART1_RX
-$Comp
-L R R3
-U 1 1 5BB13D33
-P 9450 3825
-F 0 "R3" V 9530 3825 50  0000 C CNN
-F 1 "0" V 9450 3825 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 9380 3825 30  0001 C CNN
-F 3 "do not populate" H 9450 3825 30  0001 C CNN
-F 4 "do not place" H 5175 1700 60  0001 C CNN "Do Not Place"
-	1    9450 3825
-	0    1    1    0   
-$EndComp
-$Comp
-L R R4
-U 1 1 5BB13E3C
-P 9775 3925
-F 0 "R4" V 9855 3925 50  0000 C CNN
-F 1 "0" V 9775 3925 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805" V 9705 3925 30  0001 C CNN
-F 3 "do not populate" H 9775 3925 30  0001 C CNN
-F 4 "do not place" H 5175 1700 60  0001 C CNN "Do Not Place"
-	1    9775 3925
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	9150 3825 9300 3825
-Wire Wire Line
-	9600 3825 10075 3825
-Wire Wire Line
-	10075 3925 9925 3925
-Wire Wire Line
-	9625 3925 9150 3925
 $Comp
 L CONN_01X06 J4
 U 1 1 5BB1412D
@@ -793,8 +750,6 @@ NoConn ~ 9150 5025
 NoConn ~ 9150 5225
 NoConn ~ 9150 5325
 NoConn ~ 9150 5425
-NoConn ~ 8650 5125
-NoConn ~ 8650 5025
 NoConn ~ 8650 4925
 NoConn ~ 8650 4225
 NoConn ~ 8650 4125
@@ -803,7 +758,6 @@ Text GLabel 5725 4150 2    60   BiDi ~ 0
 DEBUG_GPIO
 Text GLabel 8650 5325 0    60   BiDi ~ 0
 DEBUG_GPIO
-NoConn ~ 6725 4150
 Wire Wire Line
 	1275 3825 2300 3825
 Wire Wire Line
@@ -876,4 +830,117 @@ F 3 "" H 1750 3225 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 1750 3825
+Text GLabel 8650 5125 0    60   BiDi ~ 0
+BOOTLOADER
+Text GLabel 3100 5025 0    60   Input ~ 0
+NRST
+Wire Wire Line
+	3100 5025 3425 5025
+Connection ~ 3425 5025
+Text GLabel 8650 5025 0    60   Output ~ 0
+NRST
+$Comp
+L GS2 J5
+U 1 1 5BFEFF92
+P 9450 3825
+F 0 "J5" H 9550 3975 50  0000 C CNN
+F 1 "GS2" H 9550 3676 50  0000 C CNN
+F 2 "Connectors:GS2" V 9524 3825 50  0001 C CNN
+F 3 "" H 9450 3825 50  0001 C CNN
+	1    9450 3825
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9150 3825 9250 3825
+Wire Wire Line
+	9650 3825 10075 3825
+$Comp
+L GS2 J6
+U 1 1 5BFF024A
+P 9750 3925
+F 0 "J6" H 9850 4075 50  0000 C CNN
+F 1 "GS2" H 9850 3776 50  0000 C CNN
+F 2 "Connectors:GS2" V 9824 3925 50  0001 C CNN
+F 3 "" H 9750 3925 50  0001 C CNN
+	1    9750 3925
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9950 3925 10075 3925
+Wire Wire Line
+	9550 3925 9150 3925
+$Comp
+L GND #PWR029
+U 1 1 5BFF0669
+P 4925 1950
+F 0 "#PWR029" H 4925 1700 50  0001 C CNN
+F 1 "GND" H 4925 1800 50  0000 C CNN
+F 2 "" H 4925 1950 60  0000 C CNN
+F 3 "" H 4925 1950 60  0000 C CNN
+	1    4925 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D2
+U 1 1 5BFF0678
+P 4925 1700
+F 0 "D2" H 4925 1800 50  0000 C CNN
+F 1 "POWER" H 4925 1600 50  0000 C CNN
+F 2 "LEDs:LED_0805" H 4925 1700 50  0001 C CNN
+F 3 "https://katalog.we-online.de/led/datasheet/150080GS75000.pdf" H 4925 1700 50  0001 C CNN
+F 4 "Wurth" H 6025 1700 60  0001 C CNN "Manufacturer"
+F 5 "150080GS75000" H 6025 1700 60  0001 C CNN "Manufacturer PN"
+F 6 "Digikey" H 6025 1700 60  0001 C CNN "Distributor"
+F 7 "732-4983-2-ND" H 6025 1700 60  0001 C CNN "Distributor PN"
+F 8 "https://www.digikey.com/product-detail/en/wurth-electronics-inc/150080GS75000/732-4983-2-ND/4489915" H 9075 1675 50  0001 C CNN "Distributor URL"
+F 9 "LED green" H 6025 1700 60  0001 C CNN "Description"
+F 10 "0805" H 6025 1700 60  0001 C CNN "Package"
+F 11 "SMT" H 6025 1700 60  0001 C CNN "Type"
+F 12 "" H 6025 1700 60  0001 C CNN "Do Not Place"
+	1    4925 1700
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R3
+U 1 1 5BFF0687
+P 4925 1300
+F 0 "R3" V 5005 1300 50  0000 C CNN
+F 1 "1K" V 4925 1300 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805" V 4855 1300 30  0001 C CNN
+F 3 "http://www.susumu.co.jp/common/pdf/n_catalog_partition05_en.pdf" H 4925 1300 30  0001 C CNN
+F 4 "Susumu" H 6025 1700 60  0001 C CNN "Manufacturer"
+F 5 "RR1220P-221-D" H 6025 1700 60  0001 C CNN "Manufacturer PN"
+F 6 "Digikey" H 6025 1700 60  0001 C CNN "Distributor"
+F 7 "RR12P220DTR-ND" H 6025 1700 60  0001 C CNN "Distributor PN"
+F 8 "https://www.digikey.com/products/en/resistors/chip-resistor-surface-mount/52?k=&pkeyword=&pv2085=u220+Ohms&sf=0&FV=ffe00034%2Cffec0513%2Cfffc0198%2C80002%2Cc0163%2C140716%2C1c0001%2C400006%2C44006b%2Cb8356f%2C2b80017%2C3f00019%2Cii2%7C1127%2C142c00a5%2C1770000f%2C17ec0005%2C1f140000&quantity=&ColumnSort=0&page=1&pageSize=500" H 9075 1675 50  0001 C CNN "Distributor URL"
+F 9 "RES 220 OHM 1% 0805" H 6025 1700 60  0001 C CNN "Description"
+F 10 "0805" H 6025 1700 60  0001 C CNN "Package"
+F 11 "SMD" H 6025 1700 60  0001 C CNN "Type"
+F 12 "" H 6025 1700 60  0001 C CNN "Do Not Place"
+	1    4925 1300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4925 1950 4925 1850
+Wire Wire Line
+	4925 1450 4925 1550
+Wire Wire Line
+	6850 1800 6500 1800
+Wire Wire Line
+	8875 1775 8525 1775
+Wire Wire Line
+	9375 1375 8525 1375
+$Comp
+L +3.3V #PWR030
+U 1 1 5BFF0BC3
+P 4925 1150
+F 0 "#PWR030" H 4925 1000 50  0001 C CNN
+F 1 "+3.3V" H 4925 1290 50  0000 C CNN
+F 2 "" H 4925 1150 50  0001 C CNN
+F 3 "" H 4925 1150 50  0001 C CNN
+	1    4925 1150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6850 2000 6500 2000
 $EndSCHEMATC
