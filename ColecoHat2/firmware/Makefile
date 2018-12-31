@@ -52,7 +52,7 @@ $(PROJECT).hex: $(PROJECT).elf
 
 # --no-undefined
 $(PROJECT).elf:  $(OBJECTS)
-	$(TOOLROOT)/bin/$(TUPLE)-g++ $(OPT) $(CORTEX_M0_CC_FLAGS) -D$(TARGET) -TSTM32L011G4U6_FLASH.ld -lm -Wl,--gc-sections $^ -o $@
+	$(TOOLROOT)/bin/$(TUPLE)-g++ $(OPT) $(CORTEX_M0_CC_FLAGS) -D$(TARGET) -TSTM32L011G4U6.ld -lm -Wl,--gc-sections $^ -o $@
 
 startup_stm32l011xx.o: startup_stm32l011xx.s
 	$(TOOLROOT)/bin/$(TUPLE)-gcc -Wall $(OPT) $(CORTEX_M4_HWFP_CC_FLAGS)  $< -c -o $@
